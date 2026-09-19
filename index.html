@@ -251,6 +251,39 @@
   </main>
 
   <script>
+
+    // Ganti dengan URL hasil "Publish to web" (format CSV) milik Anda
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHPtO48w817ATC_PRm_d6Jj1gay3PJ8RiRMzk2E2AU14z0cSMdRXimHtA_cvSX5YuEHWPBBBBX0pgk/pubhtml';
+
+        async function ambilData() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const dataTeks = await response.text();
+                
+                // Mengubah teks CSV menjadi baris-baris data
+                const baris = dataTeks.split("\n");
+                const headers = baris[0].split(",");
+                
+                let htmlKonten = "<ul>";
+                
+                // Looping dari baris kedua (indeks 1) karena baris pertama adalah Header
+                for (let i = 1; i < baris.length; i++) {
+                    if (baris[i].trim() === "") continue; // Lewati baris kosong
+                    
+                    const kolom = baris[i].split(",");
+                    // Contoh: mengambil kolom pertama (nama) dan kolom kedua (harga)
+                    htmlKonten += `<li><strong>${kolom[0]}</strong> - Rp ${kolom[1]}</li>`;
+                }
+                
+                htmlKonten += "</ul>";
+                document.getElementById("data-container").innerHTML = htmlKonten;
+                
+            } catch (error) {
+                console.error("Gagal memuat data:", error);
+                document.getElementById("data-container").innerHTML = "Gagal memuat data.";
+            }
+        }
+    
     let currentUser = null;
     let myChart = null;
 
