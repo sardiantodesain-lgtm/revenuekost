@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Dashboard Kost</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://google.com" async defer></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -335,23 +334,34 @@
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     }
 
-    // --- AUTENTIKASI ---
-    function handleLogin(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button');
-      btn.innerText = "Memproses...";
-      
-      google.script.run.withSuccessHandler(res => {
-        btn.innerText = "Masuk";
-        if (res.success) {
-          currentUser = res;
-          document.getElementById('displayUser').innerText = res.username;
-          document.getElementById('accUser').value = res.username;
-          document.getElementById('authPage').style.display = 'none';
-          loadDashboard(); // Load chart
-        } else alert(res.message);
-      }).loginUser(document.getElementById('loginUser').value, document.getElementById('loginPass').value);
-    }
+   function handleLogin(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.innerText = "Memproses...";
+  btn.disabled = true; // Tambahan: nonaktifkan tombol saat memproses
+  
+  google.script.run
+    .withSuccessHandler(res => {
+      btn.innerText = "Masuk";
+      btn.disabled = false;
+      if (res.success) {
+        currentUser = res;
+        document.getElementById('displayUser').innerText = res.username;
+        document.getElementById('accUser').value = res.username;
+        document.getElementById('authPage').style.display = 'none';
+        loadDashboard(); 
+      } else {
+        alert(res.message);
+      }
+    })
+    .withFailureHandler(err => { // Tambahan: jika sistem Apps Script error
+      btn.innerText = "Masuk";
+      btn.disabled = false;
+      alert("Terjadi kesalahan sistem: " + err.message);
+    })
+    .loginUser(document.getElementById('loginUser').value, document.getElementById('loginPass').value);
+}
+
 
     function logout() {
       currentUser = null;
