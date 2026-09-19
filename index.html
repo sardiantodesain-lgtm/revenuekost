@@ -253,8 +253,7 @@
   <script>
 
     // Ganti dengan URL hasil "Publish to web" (format CSV) milik Anda
-        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHPtO48w817ATC_PRm_d6Jj1gay3PJ8RiRMzk2E2AU14z0cSMdRXimHtA_cvSX5YuEHWPBBBBX0pgk/pubhtml';
-
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHPtO48w817ATC_PRm_d6Jj1gay3PJ8RiRMzk2E2AU14z0cSMdRXimHtA_cvSX5YuEHWPBBBBX0pgk/pub?output=csv';
         async function ambilData() {
             try {
                 const response = await fetch(SHEET_URL);
